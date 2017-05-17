@@ -1,0 +1,28 @@
+version: "3"
+services:
+  mongo:
+    container_name: vertx-db
+    image: mongo
+    ports:
+      - "27017:27017"
+    deploy:
+      restart_policy:
+        condition: on-failure
+    volumes:dock
+      -  db-data:/data/db
+  application:
+    container_name: vertx-app
+    image: jvzoggel/my-first-vertx-app
+    ports:
+      - "8080:8080"
+    links:
+      ["mongo"]
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=development
+    deploy:
+      restart_policy:
+        condition: on-failure
+volumes:
+    db-data:
